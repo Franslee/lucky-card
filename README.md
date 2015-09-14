@@ -1,67 +1,52 @@
-# PageSlider #
- 
-PageSlider 是一个基于zepto.js用于实现H5单页面跟随手指上下滑动切换的组件，支持通过transform3D启动GPU加速，目前仅支持移动端touch设备。
+# lucky-card #
+
+lucky-card是一个基于HTML5 Canvas的用于实现刮刮卡刮奖效果的javascript小控件，控件采用原生js编写，不依赖任何类库，支持AMD/CMD模块化加载，支持iOS、android和桌面浏览器（IE>=9）,windows phone未测。
 
 ## DEMO ##
 
 请用手机扫描以下二维码,在打开的页面上下滑动查看效果     
-#![github](http://franslee.github.io/pageSlider/qr-code.png "pageSlider DEMO") 
+#![github](http://franslee.github.io/lucky-card/qr_code.png "lucky-card DEMO") 
 
 ## 用法 ##
 
 HTML结构
 
 ```html
-<!DOCTYPE html>
-<html>
-	<head>
-	  <!-- styles, scripts, etc -->
-	</head>
-	<body>
-		<div class="section sec1"></div>
-		<div class="section sec2"></div>
-		<div class="section sec3"></div>
-		<div class="section sec4"></div>
-	</body>
-</html>
+<div id="scratch">
+    <div id="card">￥1000.00万</div>
+</div>
 ```
 
-在页面中引入组件所需样式表文件pageSlider.css
+在页面中引入组件所需样式表文件lucky-card.css
 
 ```html
-<link rel="stylesheet" href="../dist/pageSlider.css">
+<link rel="stylesheet" href="../dist/lucky-card.css">
 ```
 
-本组件基于zepto，需要在页面中引入zepto.js文件
+引入lucky-card.js/lucky-card.min.js文件
 
 ```html
-<script src='http://cdn.bootcss.com/zepto/1.1.4/zepto.min.js'></script>
+<script src='../dist/lucky-card.js'></script>
 ```
 
-引入pageSlider.js/pageSlider.min.js文件
-
-```html
-<script src='../dist/pageSlider.js'></script>
-```
-
-在页面DOM加载完毕之后，初始化组件
+在确保页面相关DOM加载完毕(如写在页面底部，或document的DOMContentLoaded事件处理函数中)之后，初始化组件
 
 ```js
-$(function() {
-	var pageSlider = PageSlider.case();
-});
+document.addEventListener("DOMContentLoaded",function(){
+	LuckyCard.case();
+}, false);
 ```
 
 ## 设置 settings ##
 
-初始化PageSlider组件时，支持传入一个参数，用于配置组件功能
+初始化lucky-card组件时，支持传入一个JSON对象和(或)一个回调函数，用于配置控件功能，或设置回调函数
 
 ```js
-PageSlider.case(optOrIndex);
+LuckyCard.case(settings,callback);
 ```
 
-* 参数optOrIndex可以是一个数字(number),用于设置初始显示的页码
-* 参数optOrIndex也可以是一个json对象，允许的keys见下表
+* 参数settings是一个JSON对象，可选，用于配置控件功能
+* 参数callback是回调函数，可选，也可以写在settings中
 
 <table>
 	<tr>
@@ -71,60 +56,41 @@ PageSlider.case(optOrIndex);
 		<th>描述</th>
 	</tr>
 	<tr>
-		<td>startPage</td>
+		<td>coverColor</td>
+		<td>string</td>
+		<td>"#C5C5C5"</td>
+		<td>刮开层的颜色，未设置coverImg时生效，支持十六进制和rgba写法</td>
+	</tr>
+	<tr>
+		<td>coverImg</td>
+		<td>string</td>
+		<td>""</td>
+		<td>刮开层可以是一张图片，在这里设置图片地址，一旦设置coverColor将失效。（注意：图片地址不支持跨域，如果跨域可以考虑将先其转成Data URI）</td>
+	</tr>
+	<tr>
+		<td>ratio</td>
 		<td>number</td>
-		<td>1</td>
-		<td>初始化时显示页面的页码</td>
-	</tr>
-	<tr>
-		<td>range</td>
-		<td>number</td>
-		<td>70</td>
-		<td>页面回弹的最大距离(像素)，小于该值页面回弹，超过该值页面将切换</td>
-	</tr>
-	<tr>
-		<td>duration</td>
-		<td>number</td>
-		<td>200</td>
-		<td>页面回弹动画持续的时间(毫秒)</td>
-	</tr>
-	<tr>
-		<td>loop</td>
-		<td>boolean</td>
-		<td>false</td>
-		<td>是否循环切换</td>
-	</tr>
-	<tr>
-		<td>elastic</td>
-		<td>boolean</td>
-		<td>true</td>
-		<td>位于顶部(底部)时，是否依然可以向上(向下)拉动</td>
-	</tr>
-	<tr>
-		<td>translate3d</td>
-		<td>boolean</td>
-		<td>true</td>
-		<td>是否使用translate3d(在支持translate3d的设备上)，使用translate3d会使一些设备开启GPU加速，滑动更流畅</td>
+		<td>0.8</td>
+		<td>设置触发回调函数时刮开面积占总面积的比例，超过这个比例回调就触发</td>
 	</tr>
 	<tr>
 		<td>callback</td>
-		<td>object</td>
-		<td>{}</td>
-		<td>页面切换回调函数集合。该json对象每个键为一个数值，对应一个页码，值为一个function,滑动到该页面时触发。如：{2:function(){alert('滑动到了第二页');},4:function(){alert('滑动到了第四页');}} 滑动到第二和第四页时将触发对应的回调函数</td>
+		<td>function</td>
+		<td>null</td>
+		<td>回调函数，刮开面积占总面积的比例超过设定值时触发，亦可作为一个独立的参数写在本settings对象之外。回调函数内可以调用this.clearCover()方法清除掉刮开层的所有像素。</td>
 	</tr>
 </table>
 
 ```js
-PageSlider.case({loop:true});
-```
+//基本用法
+LuckyCard.case({coverColor:'#CCCCCC',ratio:.6,callback:function(){alert('中奖啦！')}});
 
-## 切换到指定页面 ##
+//刮开层支持使用图片，但图片不能跨域，如果跨域可以考虑将先其转成Data URI，再设置
+LuckyCard.case({coverImg:'./demo.jpg'});
 
-在页面初始化后，可调用组件的go方法跳转到指定页面。
-
-```js
-//PageSlider初始化
-var pageSlider = PageSlider.case();
-//跳转到第3页
-pageSlider.go(3);
+//callback可作为一个独立的参数存在
+LuckyCard.case(function(){
+	//清除掉刮开层的所有像素
+	this.clearCover();
+});
 ```
