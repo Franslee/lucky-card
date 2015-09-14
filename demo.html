@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>lucky-card.js demo</title>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <style>
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        background: #FFFFFF;
+    }
+    
+    #card {
+        height: 100%;
+        font-weight: bold;
+        font-size: 36px;
+        line-height: 100px;
+        text-align: center;
+        background: #FAFAFA;
+    }
+    
+    #scratch {
+        width: 300px;
+        height: 100px;
+        margin: 50px auto 0;
+        border: 1px solid #ccc;
+    }
+    </style>
+    <link rel="stylesheet" href="./dist/lucky-card.css">
+    <script src="./dist/lucky-card.min.js"></script>
+</head>
+
+<body>
+    <div id="scratch">
+        <div id="card">￥1000.00万</div>
+    </div>
+    <script>
+    LuckyCard.case({
+        ratio: .6
+    }, function() {
+        alert('至于你信不信，我反正不信！');
+        this.clearCover();
+    });
+    </script>
+</body>
+
+</html>
