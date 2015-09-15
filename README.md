@@ -13,7 +13,7 @@ HTML结构
 
 ```html
 <div id="scratch">
-    <div id="card">￥1000.00万</div>
+    <div id="card">￥5000000元</div>
 </div>
 ```
 
