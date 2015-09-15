@@ -1,10 +1,10 @@
 # lucky-card #
 
-lucky-card是一个基于HTML5 Canvas的用于实现刮刮卡刮奖效果的javascript小控件，控件采用原生js编写，不依赖任何类库，支持AMD/CMD模块化加载，支持iOS、android和桌面浏览器（IE>=9）,windows phone未测。
+lucky-card是一个实现刮刮卡刮奖效果的JavaScript小控件，基于HTML5 Canvas，采用原生js编写，不依赖任何类库，支持AMD/CMD模块化加载，支持iOS、Android和桌面浏览器（IE>=9）,Windows Phone未测。
 
 ## DEMO ##
 
-请用手机扫描以下二维码,在打开的页面上下滑动查看效果     
+请用手机扫描以下二维码，桌面浏览器可以[点击这里](http://franslee.github.io/lucky-card/demo.html)
 #![github](http://franslee.github.io/lucky-card/qr_code.png "lucky-card DEMO") 
 
 ## 用法 ##
@@ -17,11 +17,13 @@ HTML结构
 </div>
 ```
 
-在页面中引入组件所需样式表文件lucky-card.css
+在页面中引入控件所需样式表文件lucky-card.css
 
 ```html
 <link rel="stylesheet" href="../dist/lucky-card.css">
 ```
+*以上css文件只有控件所必需的样式，刮刮卡样式请根据需要自行编写（可参考DEMO页面）*
+
 
 引入lucky-card.js/lucky-card.min.js文件
 
@@ -29,17 +31,15 @@ HTML结构
 <script src='../dist/lucky-card.js'></script>
 ```
 
-在确保页面相关DOM加载完毕(如写在页面底部，或document的DOMContentLoaded事件处理函数中)之后，初始化组件
+在确保页面相关DOM加载完毕(*如写在页面底部，或document的DOMContentLoaded事件处理函数中*)之后，初始化控件
 
 ```js
-document.addEventListener("DOMContentLoaded",function(){
-	LuckyCard.case();
-}, false);
+LuckyCard.case();
 ```
 
-## 设置 settings ##
+## 可配置项与回调函数 ##
 
-初始化lucky-card组件时，支持传入一个JSON对象和(或)一个回调函数，用于配置控件功能，或设置回调函数
+初始化lucky-card控件时，支持传入一个JSON对象和(或)一个回调函数，用于配置控件功能/设置回调函数
 
 ```js
 LuckyCard.case(settings,callback);
@@ -48,6 +48,7 @@ LuckyCard.case(settings,callback);
 * 参数settings是一个JSON对象，可选，用于配置控件功能
 * 参数callback是回调函数，可选，也可以写在settings中
 
+### 可配置项（settings）一览 ###
 <table>
 	<tr>
 		<th>key</th>
@@ -65,19 +66,19 @@ LuckyCard.case(settings,callback);
 		<td>coverImg</td>
 		<td>string</td>
 		<td>""</td>
-		<td>刮开层可以是一张图片，在这里设置图片地址，一旦设置coverColor将失效。（注意：图片地址不支持跨域，如果跨域可以考虑将先其转成Data URI）</td>
+		<td>刮开层可以是一张图片，在这里设置图片地址，一旦设置此项，coverColor将失效。（注意：图片地址不支持跨域，如果跨域可以考虑将先其转成Data URI）</td>
 	</tr>
 	<tr>
 		<td>ratio</td>
 		<td>number</td>
 		<td>0.8</td>
-		<td>设置触发回调函数时刮开面积占总面积的比例，超过这个比例回调就触发</td>
+		<td>触发回调函数时刮开面积占总面积的比例，超过这个比例回调就触发。建议取值在0到1之间。</td>
 	</tr>
 	<tr>
 		<td>callback</td>
 		<td>function</td>
 		<td>null</td>
-		<td>回调函数，刮开面积占总面积的比例超过设定值时触发，亦可作为一个独立的参数写在本settings对象之外。回调函数内可以调用this.clearCover()方法清除掉刮开层的所有像素。</td>
+		<td>回调函数，在刮开面积占总面积的比例超过设定值时触发，亦可作为一个独立的参数存在。回调函数内可以调用this.clearCover()方法清除掉刮开层的所有像素。</td>
 	</tr>
 </table>
 
