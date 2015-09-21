@@ -1,4 +1,4 @@
-# lucky-card #
+# lucky-card [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Franslee/lucky-card/blob/master/LICENSE) #
 
 lucky-card是一个实现刮刮卡刮奖效果的JavaScript小控件，基于HTML5 Canvas，采用原生js编写，不依赖任何类库，支持AMD/CMD模块化加载，支持iOS、Android和桌面浏览器（IE>=9）,Windows Phone未测。
 
