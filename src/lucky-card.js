@@ -64,6 +64,11 @@
         });
     }
 
+    function _isCanvasSupported(){
+      var elem = document.createElement('canvas');
+      return !!(elem.getContext && elem.getContext('2d'));
+    }
+
     /**
      * touchstart/mousedown event handler
      */
@@ -158,6 +163,10 @@
      * @param {function} callback  callback function
      */
     LuckyCard.prototype.init = function(settings, callback) {
+        if(!_isCanvasSupported()){
+            alert('对不起，当前浏览器不支持Canvas，无法使用本控件！');
+            return;
+        }
         var _this = this;
         _forEach(arguments, function(item) {
             if (typeof item === "object") {
