@@ -8,7 +8,10 @@
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * Version:  1.0
+ * Version:  1.0.1
+ *
+ * Update:
+ *          1.0.1 Fixed a bug about "coverImg".(Thanks dongnanyanhai found the problem) 2015-11-10
  *
  */
 ;
@@ -174,7 +177,7 @@
                     if (k === 'callback' && typeof item[k] === 'function') {
                         _this.opt.callback = item[k].bind(_this);
                     } else {
-                        _this.opt[k] && (_this.opt[k] = item[k]);
+                        k in _this.opt && (_this.opt[k] = item[k]);
                     }
                 }
             } else if (typeof item === "function") {
