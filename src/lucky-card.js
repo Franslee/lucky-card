@@ -89,8 +89,8 @@
     function _moveEventHandler(event) {
         var evt = this.supportTouch?event.touches[0]:event;
         var coverPos = this.cover.getBoundingClientRect();
-        var mouseX = evt.pageX - coverPos.left;
-        var mouseY = evt.pageY - coverPos.top;
+        var mouseX = evt.pageX - coverPos.left + window.scrollX;
+        var mouseY = evt.pageY - coverPos.top + window.scrollY;
 
         this.ctx.beginPath();
         this.ctx.fillStyle = '#FFFFFF';
