@@ -8,7 +8,11 @@
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * Version:  1.0
+ * Version:  1.0.1
+ *
+ * Update:
+ *          1.0.1 Fixed a bug with "coverImg".(Thanks to dongnanyanhai reported the problem) 2015-11-10
+ *          1.0.2 Fixed a bug when page can be scrolling.(Thanks to agileago's report & Tomatoo's pull) 2016-03-17
  *
  */
 ;
@@ -86,8 +90,10 @@
     function _moveEventHandler(event) {
         var evt = this.supportTouch?event.touches[0]:event;
         var coverPos = this.cover.getBoundingClientRect();
-        var mouseX = evt.pageX - coverPos.left;
-        var mouseY = evt.pageY - coverPos.top;
+        var pageScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        var pageScrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
+        var mouseX = evt.pageX - coverPos.left - pageScrollLeft;
+        var mouseY = evt.pageY - coverPos.top - pageScrollTop;
 
         this.ctx.beginPath();
         this.ctx.fillStyle = '#FFFFFF';
@@ -174,7 +180,7 @@
                     if (k === 'callback' && typeof item[k] === 'function') {
                         _this.opt.callback = item[k].bind(_this);
                     } else {
-                        _this.opt[k] && (_this.opt[k] = item[k]);
+                        k in _this.opt && (_this.opt[k] = item[k]);
                     }
                 }
             } else if (typeof item === "function") {
