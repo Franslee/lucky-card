@@ -11,7 +11,8 @@
  * Version:  1.0.1
  *
  * Update:
- *          1.0.1 Fixed a bug about "coverImg".(Thanks dongnanyanhai found the problem) 2015-11-10
+ *          1.0.1 Fixed a bug with "coverImg".(Thanks to dongnanyanhai reported the problem) 2015-11-10
+ *          1.0.2 Fixed a bug when page can be scrolling.(Thanks to agileago's report & Tomatoo's pull) 2016-03-17
  *
  */
 ;
@@ -89,8 +90,10 @@
     function _moveEventHandler(event) {
         var evt = this.supportTouch?event.touches[0]:event;
         var coverPos = this.cover.getBoundingClientRect();
-        var mouseX = evt.pageX - coverPos.left + window.scrollX;
-        var mouseY = evt.pageY - coverPos.top + window.scrollY;
+        var pageScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        var pageScrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
+        var mouseX = evt.pageX - coverPos.left - pageScrollLeft;
+        var mouseY = evt.pageY - coverPos.top - pageScrollTop;
 
         this.ctx.beginPath();
         this.ctx.fillStyle = '#FFFFFF';
