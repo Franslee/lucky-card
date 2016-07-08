@@ -77,6 +77,7 @@
      * touchstart/mousedown event handler
      */
     function _startEventHandler(event) {
+        this.cardDiv.style.opacity = 1;
         this.moveEventHandler = _moveEventHandler.bind(this);
         this.cover.addEventListener(this.events[1],this.moveEventHandler,false);
         this.endEventHandler = _endEventHandler.bind(this);
@@ -192,6 +193,7 @@
         if (!this.scratchDiv || !this.cardDiv) return;
         this.cHeight = this.cardDiv.clientHeight;
         this.cWidth = this.cardDiv.clientWidth;
+        this.cardDiv.style.opacity = 0;
         this.createCanvas();
         this.eventDetect();
     };
