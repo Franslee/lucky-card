@@ -95,13 +95,25 @@
         var pageScrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
         var mouseX = evt.pageX - coverPos.left - pageScrollLeft;
         var mouseY = evt.pageY - coverPos.top - pageScrollTop;
-
+        
         this.ctx.beginPath();
         this.ctx.fillStyle = '#FFFFFF';
         this.ctx.globalCompositeOperation = "destination-out";
-        this.ctx.arc(mouseX, mouseY, 10, 0, 2 * Math.PI);
-        this.ctx.fill();
-
+        if(this.prepoint){
+            this.ctx.lineCap="round"
+            this.ctx.lineWidth = 20
+            this.ctx.moveTo(this.prepoint.x,this.prepoint.y)
+            this.ctx.lineTo(mouseX, mouseY);
+            this.ctx.stroke();
+        }else{
+            this.ctx.arc(mouseX, mouseY, 10, 0, 2 * Math.PI);
+            this.ctx.fill();            
+        }
+        //save point
+        this.prepoint = {
+            x:mouseX,
+            y:mouseY
+        }
         event.preventDefault();
     };
 
@@ -109,6 +121,7 @@
      * touchend/mouseup event handler
      */
     function _endEventHandler(event) {
+        this.prepoint = undefined     
         if (this.opt.callback && typeof this.opt.callback === 'function') _calcArea(this.ctx, this.opt.callback, this.opt.ratio);
         this.cover.removeEventListener(this.events[1],this.moveEventHandler,false);
         document.removeEventListener(this.events[2],this.endEventHandler,false);
