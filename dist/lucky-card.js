@@ -8,11 +8,12 @@
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * Version:  1.0.1
+ * Version:  1.0.3
  *
  * Update:
  *          1.0.1 Fixed a bug with "coverImg".(Thanks to dongnanyanhai reported the problem) 2015-11-10
  *          1.0.2 Fixed a bug when page can be scrolling.(Thanks to agileago's report & Tomatoo's pull) 2016-03-17
+ *          1.0.3 Fixed some bugs. 2017-08-17
  *
  */
 ;
@@ -48,7 +49,7 @@
     };
 
     function _calcArea(ctx, callback, ratio) {
-        var pixels = ctx.getImageData(0, 0, 300, 100);
+        var pixels = ctx.getImageData(0, 0, this.cWidth, this.cHeight);
         var transPixels = [];
         _forEach(pixels.data, function(item, i) {
             var pixel = pixels.data[i + 3];
@@ -77,17 +78,18 @@
      * touchstart/mousedown event handler
      */
     function _startEventHandler(event) {
+        event.preventDefault();
         this.moveEventHandler = _moveEventHandler.bind(this);
         this.cover.addEventListener(this.events[1],this.moveEventHandler,false);
         this.endEventHandler = _endEventHandler.bind(this);
         document.addEventListener(this.events[2],this.endEventHandler,false);
-        event.preventDefault();
     };
 
     /**
      * touchmove/mousemove event handler
      */
     function _moveEventHandler(event) {
+        event.preventDefault();
         var evt = this.supportTouch?event.touches[0]:event;
         var coverPos = this.cover.getBoundingClientRect();
         var pageScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -100,18 +102,16 @@
         this.ctx.globalCompositeOperation = "destination-out";
         this.ctx.arc(mouseX, mouseY, 10, 0, 2 * Math.PI);
         this.ctx.fill();
-
-        event.preventDefault();
     };
 
     /**
      * touchend/mouseup event handler
      */
     function _endEventHandler(event) {
-        if (this.opt.callback && typeof this.opt.callback === 'function') _calcArea(this.ctx, this.opt.callback, this.opt.ratio);
+        event.preventDefault();
+        if (this.opt.callback && typeof this.opt.callback === 'function') _calcArea.call(this,this.ctx, this.opt.callback, this.opt.ratio);
         this.cover.removeEventListener(this.events[1],this.moveEventHandler,false);
         document.removeEventListener(this.events[2],this.endEventHandler,false);
-        event.preventDefault();
     };
 
     /**
@@ -135,6 +135,7 @@
             this.ctx.fillRect(0, 0, this.cover.width, this.cover.height);
         }
         this.scratchDiv.appendChild(this.cover);
+        this.cardDiv.style.opacity = 1;
     }
 
     /**
@@ -159,6 +160,9 @@
      */
     LuckyCard.prototype.clearCover = function() {
         this.ctx.clearRect(0, 0, this.cover.width, this.cover.height);
+        this.cover.removeEventListener(this.events[0],this.startEventHandler);
+        this.cover.removeEventListener(this.events[1],this.moveEventHandler);
+        this.cover.removeEventListener(this.events[2],this.endEventHandler);
     };
 
 
@@ -192,6 +196,7 @@
         if (!this.scratchDiv || !this.cardDiv) return;
         this.cHeight = this.cardDiv.clientHeight;
         this.cWidth = this.cardDiv.clientWidth;
+        this.cardDiv.style.opacity = 0;
         this.createCanvas();
         this.eventDetect();
     };
